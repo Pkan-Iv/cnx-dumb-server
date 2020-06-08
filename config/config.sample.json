@@ -1,0 +1,20 @@
+{
+  "endpoints": "Your provider's endpoint",
+  "host": "Your host address",
+  "mysql_admin": {
+    "host": "MySQLServer",
+    "user": "MySQLUser",
+    "password": "MySQLUserPassword",
+    "database": "Admin Database used"
+  },
+  "mysql_cdr": {
+    "host": "MySQLServer",
+    "user": "MySQLUser",
+    "password": "MySQLUserPassword",
+    "database": "CDR Database used"
+  },
+  "port": "Your host port",
+  "productToken": "Your Product Token",
+  "proxy": "Proxy address",
+  "webhook": "Your webhook url"
+}
