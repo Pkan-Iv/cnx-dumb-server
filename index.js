@@ -1,27 +1,49 @@
+import 'dotenv/config.js'
 import 'regenerator-runtime'
 
-import bodyParser from 'body-parser'
+import chalk from 'chalk'
 import compression from 'compression'
 import cors from 'cors'
 import express from 'express'
+import helmet from 'helmet'
+
+import CreateLogger from './utils/logger.js'
 
 import * as Config from './config/config.json'
-import router from './routes'
+import { Elastic, Webhook } from './routes'
 
-const { host, port } = Config,
+const { host, logs, port } = Config,
+      { HOST, PORT } = process.env,
+      Port = PORT || port,
+      Host = HOST || host,
+      logger = CreateLogger(logs),
+      log = logger({ module: ' dumb ' }),
       dumb = express()
 
-dumb.use( bodyParser.urlencoded({ extended: true }) )
-dumb.use( bodyParser.json() )
+dumb.use( helmet() )
+
+dumb.use( express.urlencoded({ extended: true }) )
+dumb.use( express.json() )
 
 dumb.use( compression() )
 
 dumb.use( cors() )
 
+dumb.use( (req, res, next) => {
+  const { body, method, path, query } = req
 
-dumb.use( '/', router )
+  log.notice( `${method}  ${path}` )
+  log.debug( body )
+  log.debug( query )
+
+  res.set({ 'Content-Type': 'application/json' })
+  return next()
+})
+
+dumb.use( '/elastic', Elastic(logger) )
+dumb.use( '/webhook', Webhook(logger) )
 
 dumb.listen( port, host, () => {
-  console.info(`Dumb Server started on http://${host}:${port}.`)
+  log.info(`${chalk.green("✓")} Dumb Server started on http://${Host}:${Port}.`)
 })
 
