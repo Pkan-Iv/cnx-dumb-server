@@ -1,6 +1,7 @@
 import { Client } from '@elastic/elasticsearch'
 import express from 'express'
 import Fetch from 'cross-fetch'
+import util from 'util'
 
 import { proxy } from './config/config.json'
 
@@ -18,6 +19,11 @@ export function Elastic(logger) {
             method
           }
 
+    if (!index) {
+      log.warning(`Enter index name.`)
+      return res.status(400).json({ reason: `Enter index name.` })
+    }
+
     client.search({
       index: index,
       body: {
@@ -26,28 +32,30 @@ export function Elastic(logger) {
         }
       }
     },
-    (err, results) => {
+    async (err, results) => {
       const { body, statusCode } = results,
             { hits } = body
       if (err) {
-        log.error(err)
-        res.status(statusCode).json({ resaon: err })
+        const { error, status } = err.meta.body
+        log.error([error.type, error.reason].join(', '))
+        return res.status(status).json({ reason: [error.type, error.reason].join(', ') })
       }
     
-      const result = hits.hits.map( ({ _source }) => _source)
-     log.debug( body)
+      const result = hits.hits.map( ({ _id, _source }) => ({_id,..._source}))
+      
       return res.status(statusCode).json({ count: hits.total.value, rows: result })
     })
   })
   
-  router.post( '/upload', async (req, res) => {
-    const { method } = req,
-          { index } = req.body,
-          options = {
-            headers: { 'content-type': 'application/json' },
-            method
-          },
-          url = `${proxy}/${index}`,
+  router.post( '/index', async (req, res) => {
+    const { index } = req.body
+
+    if (!index) {
+      log.warning(`Enter index name.`)
+      return res.status(400).json({ reason: `Enter index name.` })
+    }
+
+    const url = `${proxy}/${index}`,
           _index = index.replace('/','_')
 
     const data = await Fetch(
@@ -55,10 +63,12 @@ export function Elastic(logger) {
       { method: 'GET'}
       )
       .then( (res) => res.json())
-      .then( ({ rows }) => rows).catch( (err) => err)
+      .then( ({ rows }) => rows)
+      .catch( (err) => log.error(err))
 
     const body = data.flatMap( (doc) => [{ index: {
-      _index: _index
+      _index: _index,
+      _id: doc.id
     }},
     doc] )
 
@@ -85,9 +95,77 @@ export function Elastic(logger) {
 
     const { body: count } = await client.count({ index: _index })
 
-    log.info(count)
-    res.status(201).json({ count, rows: data })
+    res.status(201).json({ count: count.count, rows: data/* { _id: data.id ,...data } */ })
   })  
+  
+  router.put( '/index', async (req, res) => {
+    const { index } = req.body
+
+    if (!index) {
+      log.warning(`Enter index name.`)
+      return res.status(400).json({ reason: `Enter index name.` })
+    }
+
+    const url = `${proxy}/${index}`,
+          _index = index.replace('/','_')
+
+    const data = await Fetch(
+      url,
+      { method: 'GET'}
+    )
+    .then( (res) => res.json())
+    .then( ({ rows }) => rows.flatMap( (doc) => {
+      return [{
+        update: {
+          _index: _index,
+          _id: doc.id,
+        }
+      },
+      { doc: doc
+      }]
+    }))
+    .catch( (err) => log.error(err))
+    
+    client.bulk({ body: data, index: _index, refresh: true })
+    .then( async (bulkResponse) => {
+      const { statusCode,  meta } = bulkResponse,
+            result = bulkResponse.body.items.filter( ({ update }) => {
+              if (update.result === 'updated'){
+                return update
+              }
+            }).map( (item) => ({...item.update}))
+
+      log.debug( result )
+      res.status(statusCode).json( result )
+    })
+    .catch( (err) => {
+      const { error, status } = err.meta.body
+      log.error([ error.type, error.reason ].join(', '))
+      return res.status(status).json({ reason: [error.type, error.reason].join(', ') })
+    })
+  })  
+  
+  router.delete( '/index', (req, res) => {
+    const { index } = req.body
+    
+    if(!index) {
+      log.warning(`Enter index name.`)
+      return res.status(404).json({ reason: `Enter index name.` })
+    }
+
+    client.indices.delete({ index })
+    .then( (result) => {
+      const { body, statusCode } = result
+      log.debug(body)
+      return res.status(statusCode).json(body)
+    })
+    .catch( (err) => {
+      const { error, status } = err.meta.body
+      log.error([error.type, error.reason].join(', '))
+      return res.status(status).json({ reason: [error.type, error.reason].join(', ') })
+    })
+  })  
+
   return router
 }
 
