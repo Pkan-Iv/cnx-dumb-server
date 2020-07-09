@@ -41,46 +41,53 @@ export function Elastic(logger) {
   })
   
   router.post( '/upload', async (req, res) => {
-    const { body, method } = req,
-          { index } = body,
+    const { method } = req,
+          { index } = req.body,
           options = {
             headers: { 'content-type': 'application/json' },
             method
           },
-          url = `${proxy}/${index}`
+          url = `${proxy}/${index}`,
+          _index = index.replace('/','_')
 
-          console.log('url', url)
+    const data = await Fetch(
+      url,
+      { method: 'GET'}
+      )
+      .then( (res) => res.json())
+      .then( ({ rows }) => rows).catch( (err) => err)
 
-    const data = await Fetch(url, { method: 'GET'}).then( (res) => res.json()).then( ({ rows }) => rows).catch( (err) => err)
+    const body = data.flatMap( (doc) => [{ index: {
+      _index: _index
+    }},
+    doc] )
 
-    console.log('data :>> ', data);
+    const { body: bulkResponse } = await client.bulk({ refresh: true, body })
 
+    if(bulkResponse.errors) {
+      const errorDoc= []
 
+      bulkResponse.items.forEach( (action, i) => {
+        const operation = Object.keys(action)[0]
 
-
-
-    /* client.search({
-      index: index,
-      body: {
-        query: {
-          match_all: {}
+        if (action[operation].error) {
+          errorDoc.push({
+            status: action[operation].status,
+            error: action[operation].error,
+            operation: body[i * 2],
+            document: body[i * 2 + 1]
+          })
         }
-      }
-    },
-    (err, results) => {
-      const { body, statusCode } = results,
-            { hits } = body
-      if (err) {
-        log.error(err)
-        res.status(statusCode).json({ resaon: err })
-      }
-    
-      const result = hits.hits.map( ({ _source }) => _source)
-     log.debug( body)
-      return res.status(statusCode).json({ total: hits.total.value, rows: result })
-    })*/
-  }) 
-  
+      })
+      log.error(errorDoc)
+      res.status(errorDoc.status).json({ reason: errorDoc.error.reason })
+    }
+
+    const { body: count } = await client.count({ index: _index })
+
+    log.info(count)
+    res.status(201).json({ count, rows: data })
+  })  
   return router
 }
 
