@@ -13,13 +13,15 @@ import * as Config from './config/config.json'
 import { Elastic, Webhook } from './routes'
 import { eventEmitter } from './events.js'
 
+
 const { host, logs, port } = Config,
       { HOST, PORT } = process.env,
       Port = PORT || port,
       Host = HOST || host,
-      logger = CreateLogger(logs),
-      log = logger({ module: ' dumb ' }),
       dumb = express()
+      
+export const logger = CreateLogger(logs)
+const log = logger({ module: ' dumb ' })
 
 dumb.use( helmet() )
 
