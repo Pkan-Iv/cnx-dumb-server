@@ -17,7 +17,7 @@ const { createLogger, format } = Winston,
           ].join('  ')
         },
         custom: ({ date, id, level, message, module, time }) => {
-          return `${date} ${time} ${id} - [${chalk.magenta(module)}] -   ${level}   - ${message}`
+          return `${date} ${time} - ${id} - [${chalk.magenta(module)}] -   ${level}   - ${message}`
         }
       }
 
@@ -92,9 +92,9 @@ export default function CreateLogger({ level, path }) {
           format.printf((info) => {
             if (typeof info.message === 'object') {
               const { message } = info
-              return `${info.date} ${info.time} ${info.id} - [${chalk.magenta(info.module)}] -   ${info.level}\n` + util.inspect(message, false, 6, true)
+              return `${info.date} ${info.time} - ${info.id} - [${chalk.magenta(info.module)}] -   ${info.level}\n` + util.inspect(message, false, 6, true)
             }
-            return `${info.date} ${info.time} ${info.id} - [${chalk.magenta(info.module)}] -   ${info.level}\n\t${info.message}`
+            return `${info.date} ${info.time} - ${info.id} - [${chalk.magenta(info.module)}] -   ${info.level}\n\t${info.message}`
           }
           ),
         ),
