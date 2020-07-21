@@ -168,10 +168,6 @@ export function Elastic(logger) {
 
   return router
 }
-
-
-
-
 export function Webhook(logger) {
   const log = logger({ module: ' webhook ' }),
         router = express.Router()
