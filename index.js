@@ -11,6 +11,7 @@ import CreateLogger from './utils/logger.js'
 
 import * as Config from './config/config.json'
 import { Elastic, Webhook } from './routes'
+import { eventEmitter } from './events.js'
 
 const { host, logs, port } = Config,
       { HOST, PORT } = process.env,
@@ -39,6 +40,7 @@ dumb.use( (req, res, next) => {
   res.set({ 'Content-Type': 'application/json' })
   return next()
 })
+
 
 dumb.use( '/elastic', Elastic(logger) )
 dumb.use( '/webhook', Webhook(logger) )
