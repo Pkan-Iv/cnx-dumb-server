@@ -4,12 +4,17 @@ import Fetch from 'cross-fetch'
 import util from 'util'
 
 import { proxy } from './config/config.json'
+import elastic from './services/elastic'
 
 export function Elastic(logger) {
   const log = logger({ module: ' elastic ' }),
         { ELASTIC_URL } = process.env,
         client = new Client({ node: `${ELASTIC_URL}` }),
         router = express.Router()
+
+  router.get( '/find_all', elastic.findAll )
+
+  router.get( '/find', elastic.find )
   
   router.get( '/search_all', (req, res) => {
     const { method, query } = req,
