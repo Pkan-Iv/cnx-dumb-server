@@ -15,6 +15,8 @@ export function Elastic(logger) {
   router.get( '/find_all', elastic.findAll )
 
   router.get( '/find', elastic.find )
+
+  router.get( '/find/:id', elastic.findById )
   
   router.get( '/search_all', (req, res) => {
     const { method, query } = req,
