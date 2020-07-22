@@ -6,6 +6,32 @@ const { ELASTIC_URL } = process.env,
       client = new Client ({ node: `${ELASTIC_URL}` })
 
 export default {
+
+  /**
+   * Create specified index in Elasticsearch.
+   */
+  create_index(req, res, {
+    log = logger({ module: ' elastic ' })
+  } = {}) {
+    const { data, index } = req.body
+
+    if (!index) {
+      log.warning(`Enter index name.`)
+      return res.status(400).json({ reason: `Enter index name.` })
+    }
+
+    client.bulk({ refresh: true, body: data })
+    .then( (result) => {
+      const { statusCode } = result
+      res.status(statusCode).json({ result })
+    })
+    .catch( (err) => {
+      const { error, status } = err.meta.body
+      log.error([error.type, error.reason].join(', '))
+      return res.status(status).json({ reason: [error.type, error.reason].join(', ') })
+    })
+  },
+
   /**
    * Delete specified index .
    * 
