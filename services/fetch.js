@@ -100,7 +100,7 @@ export default {
   async fetch_version_index_data (req, res, next, {
     log = logger({ module: ' fetch ' }),
   } = {}) {
-    const { query } = req
+    const { body, query } = req
     if (!query.index) {
       log.warning(`Enter index name.`)
       return res.status(404).json({ reason: `Enter index name.` })
@@ -123,7 +123,7 @@ export default {
             { rows } = data,
             result = rows.flatMap( (doc) => {
               return [{
-                update: {
+                index: {
                   _index: index,
                   _id: doc.id,
                 }
