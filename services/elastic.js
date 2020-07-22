@@ -226,4 +226,33 @@ export default {
       res.json({ err })
     })
   },
+  
+  /**
+   * Version specified index in Elasticsearch.
+   */
+  version_index(req, res, {
+    log = logger({ module: ' elastic ' })
+  } = {}) {
+    const { data, index } = req.body
+
+    if (!index) {
+      log.warning(`Enter index name.`)
+      return res.status(400).json({ reason: `Enter index name.` })
+    }
+
+    client.bulk({ refresh: true, body: data, index: index })
+    .then( (result) => {
+      const { body, statusCode } = result,
+            updated = body.items.filter(({ index }) => {
+              if (index.result === 'updated') {
+                return index
+              }
+            }).map((item) => ({ ...item.index }))
+      res.status(statusCode).json(updated)
+    })
+    .catch( (err) => {
+      console.error(err)
+      res.json({ err })
+    })
+  },
 }
