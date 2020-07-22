@@ -5,12 +5,17 @@ import util from 'util'
 
 import { proxy } from './config/config.json'
 import elastic from './services/elastic'
+import FetchInterface from './services/fetch'
 
 export function Elastic(logger) {
   const log = logger({ module: ' elastic ' }),
         { ELASTIC_URL } = process.env,
         client = new Client({ node: `${ELASTIC_URL}` }),
         router = express.Router()
+
+  router.delete( '/delete_index', elastic.delete_index )
+
+  router.get( '/fetch_data', FetchInterface.fetch_create_index_data )
 
   router.get( '/find_all', elastic.findAll )
 
@@ -53,6 +58,12 @@ export function Elastic(logger) {
       return res.status(statusCode).json({ count: hits.total.value, rows: result })
     })
   })
+
+  router.post('/create_index', FetchInterface.fetch_create_index_data, elastic.create_index)
+
+  router.put('/update_index', FetchInterface.fetch_update_index_data, elastic.update_index)
+
+  router.post('/version_index', FetchInterface.fetch_version_index_data, elastic.version_index)
   
   router.post( '/index', async (req, res) => {
     const { index } = req.body
