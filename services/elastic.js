@@ -197,5 +197,33 @@ export default {
     }
 
     return res.status(400).json({ message: 'Enter an index.'})
-  } 
+  },
+  
+  /**
+   * Update specified index in Elasticsearch.
+   */
+  update_index(req, res, {
+    log = logger({ module: ' elastic ' })
+  } = {}) {
+    const { data, index } = req.body
+
+    if (!index) {
+      log.warning(`Enter index name.`)
+      return res.status(400).json({ reason: `Enter index name.` })
+    }
+
+    client.bulk({ refresh: true, body: data, index: index })
+    .then( (result) => {
+      const { body, statusCode } = result,
+            updated = body.items.filter(({ update }) => {
+              if (update.result === 'updated') {
+                return update
+              }
+            }).map((item) => ({ ...item.update }))
+      res.status(statusCode).json(updated)
+    })
+    .catch( (err) => {
+      res.json({ err })
+    })
+  },
 }
