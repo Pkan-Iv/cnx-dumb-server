@@ -33,6 +33,31 @@ export default {
   },
 
   /**
+   * Create specified index in Elasticsearch.
+   */
+  create_one(req, res, {
+    log = logger({ module: ' elastic ' })
+  } = {}) {
+    const { data, id, index } = req.body
+
+    if (!index) {
+      log.warning(`Enter index name.`)
+      return res.status(400).json({ reason: `Enter index name.` })
+    }
+
+    client.create({  body: data, id: id,  index: index, refresh: true })
+    .then( (result) => {
+      const { statusCode } = result
+      res.status(statusCode).json({ result })
+    })
+    .catch( (err) => {
+      const { error, status } = err.meta.body
+      log.error([error.type, error.reason].join(', '))
+      return res.status(status).json({ reason: [error.type, error.reason].join(', ') })
+    })
+  },
+
+  /**
    * Delete specified index .
    * 
    * @param {string} index A comma-separated list of index names to search;
@@ -59,6 +84,53 @@ export default {
       log.error([error.type, error.reason].join(', '))
       return res.status(status).json({ reason: [error.type, error.reason].join(', ') })
     })
+  },
+
+  /**
+   * Delete specified index .
+   * 
+   * @param {string} index A comma-separated list of index names to search;
+   * use _all or empty string to perform the operation on all indices.
+   */
+  deleteById(req, res, {
+    log = logger({ module: ' elastic ' })
+  } = {}) {
+    const { params, body } = req,
+    { id }  = params
+
+    if(body.index){
+      const { index }  = body
+
+      return client.delete({
+        index: index,
+        id: id,
+        refresh: true
+      })
+      .then( (data) => {
+        log.debug(data)
+        const { body, statusCode } = data
+        res.status(statusCode).json({ rows: body })
+      })
+      .catch( (err) => {
+        const { meta } = err,
+              { body, statusCode } = meta
+
+        if (body.error) {
+          const { error } = body,
+          message = [ error.type, error.reason ].join(', ')
+
+
+          log.error( message )
+          return res.status(statusCode).json({ message })
+        }
+        
+        
+        log.error( body)
+        res.status(statusCode).json({ ...body })
+      })
+    }
+
+    return res.status(400).json({ message: 'Enter an index.'})
   },
 
   /**
@@ -225,6 +297,53 @@ export default {
     .catch( (err) => {
       res.json({ err })
     })
+  },
+  
+  /**
+   * Update specified index in Elasticsearch.
+   */
+  update_one(req, res, {
+    log = logger({ module: ' elastic ' })
+  } = {}) {
+    const { body, params } = req,
+          { id } = params
+
+          if(body.data && body.index){
+            const { data, index }  = body
+      
+            return client.update({
+              body: {
+                doc: data
+              },
+              id: id,
+              index: index,
+              refresh: true
+            })
+            .then( (data) => {
+              log.debug(data)
+              const { body, statusCode } = data
+              res.status(statusCode).json({ rows: body })
+            })
+            .catch( (err) => {
+              const { meta } = err,
+                    { body, statusCode } = meta
+      
+              if (body.error) {
+                const { error } = body,
+                message = [ error.type, error.reason ].join(', ')
+      
+      
+                log.error( message )
+                return res.status(statusCode).json({ message })
+              }
+              
+              
+              log.error( body)
+              res.status(statusCode).json({ ...body })
+            })
+          }
+      
+          return res.status(400).json({ message: 'Enter an index.'})
   },
   
   /**
