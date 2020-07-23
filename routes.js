@@ -15,6 +15,8 @@ export function Elastic(logger) {
 
   router.delete( '/delete_index', elastic.delete_index )
 
+  router.delete( '/delete/:id', elastic.deleteById )
+
   router.get( '/fetch_data', FetchInterface.fetch_create_index_data )
 
   router.get( '/find_all', elastic.findAll )
@@ -23,166 +25,17 @@ export function Elastic(logger) {
 
   router.get( '/find/:id', elastic.findById )
   
-  router.get( '/search_all', (req, res) => {
-    const { method, query } = req,
-          { index } = query,
-          options = {
-            headers: { 'content-type': 'application/json' },
-            method
-          }
-
-    if (!index) {
-      log.warning(`Enter index name.`)
-      return res.status(400).json({ reason: `Enter index name.` })
-    }
-
-    client.search({
-      index: index,
-      body: {
-        query: {
-          match_all: {}
-        }
-      }
-    },
-    async (err, results) => {
-      const { body, statusCode } = results,
-            { hits } = body
-      if (err) {
-        const { error, status } = err.meta.body
-        log.error([error.type, error.reason].join(', '))
-        return res.status(status).json({ reason: [error.type, error.reason].join(', ') })
-      }
-    
-      const result = hits.hits.map( ({ _id, _source }) => ({_id,..._source}))
-      
-      return res.status(statusCode).json({ count: hits.total.value, rows: result })
-    })
-  })
-
   router.post('/create_index', FetchInterface.fetch_create_index_data, elastic.create_index)
+
+  router.post('/create_one', elastic.create_one)
+
+  router.put('/update/:id', elastic.update_one)
 
   router.put('/update_index', FetchInterface.fetch_update_index_data, elastic.update_index)
 
   router.post('/version_index', FetchInterface.fetch_version_index_data, elastic.version_index)
   
-  router.post( '/index', async (req, res) => {
-    const { index } = req.body
-
-    if (!index) {
-      log.warning(`Enter index name.`)
-      return res.status(400).json({ reason: `Enter index name.` })
-    }
-
-    const url = `${proxy}/${index}`,
-          _index = index.replace('/','_')
-
-    const data = await Fetch(
-      url,
-      { method: 'GET'}
-      )
-      .then( (res) => res.json())
-      .then( ({ rows }) => rows)
-      .catch( (err) => log.error(err))
-
-    const body = data.flatMap( (doc) => [{ index: {
-      _index: _index,
-      _id: doc.id
-    }},
-    doc] )
-
-    const { body: bulkResponse } = await client.bulk({ refresh: true, body })
-
-    if(bulkResponse.errors) {
-      const errorDoc= []
-
-      bulkResponse.items.forEach( (action, i) => {
-        const operation = Object.keys(action)[0]
-
-        if (action[operation].error) {
-          errorDoc.push({
-            status: action[operation].status,
-            error: action[operation].error,
-            operation: body[i * 2],
-            document: body[i * 2 + 1]
-          })
-        }
-      })
-      log.error(errorDoc)
-      res.status(errorDoc.status).json({ reason: errorDoc.error.reason })
-    }
-
-    const { body: count } = await client.count({ index: _index })
-
-    res.status(201).json({ count: count.count, rows: data/* { _id: data.id ,...data } */ })
-  })  
-  
-  router.put( '/index', async (req, res) => {
-    const { index } = req.body
-
-    if (!index) {
-      log.warning(`Enter index name.`)
-      return res.status(400).json({ reason: `Enter index name.` })
-    }
-
-    const url = `${proxy}/${index}`,
-          _index = index.replace('/','_')
-
-    const data = await Fetch(
-      url,
-      { method: 'GET'}
-    )
-    .then( (res) => res.json())
-    .then( ({ rows }) => rows.flatMap( (doc) => {
-      return [{
-        update: {
-          _index: _index,
-          _id: doc.id,
-        }
-      },
-      { doc: doc
-      }]
-    }))
-    .catch( (err) => log.error(err))
-    
-    client.bulk({ body: data, index: _index, refresh: true })
-    .then( async (bulkResponse) => {
-      const { statusCode,  meta } = bulkResponse,
-            result = bulkResponse.body.items.filter( ({ update }) => {
-              if (update.result === 'updated'){
-                return update
-              }
-            }).map( (item) => ({...item.update}))
-
-      log.debug( result )
-      res.status(statusCode).json( result )
-    })
-    .catch( (err) => {
-      const { error, status } = err.meta.body
-      log.error([ error.type, error.reason ].join(', '))
-      return res.status(status).json({ reason: [error.type, error.reason].join(', ') })
-    })
-  })  
-  
-  router.delete( '/index', (req, res) => {
-    const { index } = req.body
-    
-    if(!index) {
-      log.warning(`Enter index name.`)
-      return res.status(404).json({ reason: `Enter index name.` })
-    }
-
-    client.indices.delete({ index })
-    .then( (result) => {
-      const { body, statusCode } = result
-      log.debug(body)
-      return res.status(statusCode).json(body)
-    })
-    .catch( (err) => {
-      const { error, status } = err.meta.body
-      log.error([error.type, error.reason].join(', '))
-      return res.status(status).json({ reason: [error.type, error.reason].join(', ') })
-    })
-  })  
+ 
 
   return router
 }
