@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dumb": "babel-watch index.js",
+    "sandbox": "babel-watch sandbox.js",
     "start": "pm2 start --env production",
     "watch": "pm2 start --env development"
   },
@@ -28,6 +29,7 @@
     "chalk": "^4.1.0",
     "cross-fetch": "^3.0.5",
     "dotenv": "^8.2.0",
+    "express-fileupload": "^1.1.7-alpha.4",
     "helmet": "^3.23.3",
     "nanoid": "^3.1.10",
     "winston": "^3.3.3"
