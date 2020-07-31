@@ -1,17 +1,10 @@
-import { Client } from '@elastic/elasticsearch'
 import express from 'express'
-import Fetch from 'cross-fetch'
-import util from 'util'
 
-import { proxy } from './config/config.json'
 import elastic from './services/elastic'
 import FetchInterface from './services/fetch'
 
 export function Elastic(logger) {
-  const log = logger({ module: ' elastic ' }),
-        { ELASTIC_URL } = process.env,
-        client = new Client({ node: `${ELASTIC_URL}` }),
-        router = express.Router()
+  const router = express.Router()
 
   router.delete( '/delete_index', elastic.delete_index )
 
@@ -39,6 +32,16 @@ export function Elastic(logger) {
 
   return router
 }
+
+export function Test(logger) {
+  const log = logger({ module: ' test ' }),
+        router = express.Router()
+  
+  router.post( '/csv_to_json', FetchInterface.fetch_file_to_upload, FetchInterface.get_json_from_csv_files, elastic.create_index_from_file)
+  
+  return router
+}
+
 export function Webhook(logger) {
   const log = logger({ module: ' webhook ' }),
         router = express.Router()
