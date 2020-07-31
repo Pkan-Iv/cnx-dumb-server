@@ -3,7 +3,7 @@ import Path from 'path'
 import { logger } from '../index'
 
 import * as Config from '../config/config.json'
-import { csvToJSON, toNumber } from '../utils/toolkit'
+import { csvToJSON } from '../utils/toolkit'
 
 const { target } = Config
 
