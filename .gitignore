@@ -1,4 +1,5 @@
-node_modules
-yarn.lock
 config.json
 .env
+node_modules
+sandbox.js
+yarn.lock
