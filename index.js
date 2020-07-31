@@ -5,14 +5,13 @@ import chalk from 'chalk'
 import compression from 'compression'
 import cors from 'cors'
 import express from 'express'
+import FileUpload from 'express-fileupload'
 import helmet from 'helmet'
 
 import CreateLogger from './utils/logger.js'
 
 import * as Config from './config/config.json'
-import { Elastic, Webhook } from './routes'
-import { eventEmitter } from './events.js'
-
+import { Elastic, Webhook, Test } from './routes'
 
 const { host, logs, port } = Config,
       { HOST, PORT } = process.env,
@@ -31,6 +30,7 @@ dumb.use( express.json() )
 dumb.use( compression() )
 
 dumb.use( cors() )
+dumb.use( FileUpload() )
 
 dumb.use( (req, res, next) => {
   const { body, method, path, query } = req
@@ -45,6 +45,7 @@ dumb.use( (req, res, next) => {
 
 
 dumb.use( '/elastic', Elastic(logger) )
+dumb.use( '/test', Test(logger) )
 dumb.use( '/webhook', Webhook(logger) )
 
 dumb.listen( port, host, () => {
