@@ -8,6 +8,16 @@ const { ELASTIC_URL } = process.env,
 export default {
 
   /**
+   * Return true, if value entered matches an index name
+   * @param {string} index
+   */
+  checkIndices(index) {
+    return client.indices.exists({ index: index })
+    .then( ({ body }) => body )
+    .catch( (err) => log.error(err))
+  },
+
+  /**
    * Create specified index in Elasticsearch.
    */
   create_index(req, res, {
@@ -28,7 +38,161 @@ export default {
     .catch( (err) => {
       const { error, status } = err.meta.body
       log.error([error.type, error.reason].join(', '))
-      return res.status(status).json({ reason: [error.type, error.reason].join(', ') })
+      return res.status(status).json({ reason: [error.type, error.reason].join(', '), [req.body]: req.body })
+    })
+  },
+
+  create_index_from_file(req, res, {
+    log = logger({ module: ' elastic ' })
+  } = {}) {
+    const { data, index } = req.body,
+          _index = index.split('.')[0],
+          rows = data.flatMap( (doc) => {
+            return [{
+              index: {
+                _index: _index,
+                _id: doc._id,
+              }
+            },
+            doc]
+          })
+
+    client.indices.create({
+      index: _index,
+      body: {
+        mappings: {
+          properties: {
+            agent_id: {
+              type: 'text'
+            },
+            agent_name: {
+              type: 'text',
+              fields: {
+                keyword: {
+                  type: 'keyword',
+                  ignore_above: 256
+                }
+              }
+            },
+            agent_session: {
+              type: 'text',
+              fields: {
+                keyword: {
+                  type: 'keyword',
+                  ignore_above: 256
+                }
+              }
+            },
+            attempt_duration: {
+              type: 'integer'
+            },
+            chat_duration: {
+              type: 'integer'
+            },
+            duration: {
+              type: 'integer'
+            },
+            end_cause: {
+              type: 'text',
+              fields: {
+                keyword: {
+                  type: 'keyword',
+                  ignore_above: 256
+                }
+              }
+            },
+            end_time: {
+              type: 'date',
+              format: 'MM-dd-yyyy HH:mm:ss.SSS'
+            },
+            id: {
+              type: 'integer',
+            },
+            nb_agent_msg: {
+              type: 'integer',
+            },
+            nb_agents: {
+              type: 'integer',
+            },
+            nb_managed_visitors: {
+              type: 'integer',
+            },
+            nb_visitor_msg: {
+              type: 'integer',
+            },
+            nb_waiting_visitors: {
+              type: 'integer',
+            },
+            project: {
+              type: 'text',
+              fields: {
+                keyword: {
+                  type: 'keyword',
+                  ignore_above: 256
+                }
+              }
+            },
+            queue_id: {
+              type: 'integer',
+            },
+            queue_name: {
+              type: 'text',
+              fields: {
+                keyword: {
+                  type: 'keyword',
+                  ignore_above: 256
+                }
+              }
+            },
+            session_id: {
+              type: 'text',
+              fields: {
+                keyword: {
+                  type: 'keyword',
+                  ignore_above: 256
+                }
+              }
+            },
+            timestamp: {
+              type: 'date',
+              format: 'MM-dd-yyyy HH:mm:ss.SSS'
+            },
+            wait_duration: {
+              type: 'integer',
+            },
+            white_label: {
+              type: 'text',
+              fields: {
+                keyword: {
+                  type: 'keyword',
+                  ignore_above: 256
+                }
+              }
+            }
+          }
+        }
+      }
+    }, { ignore: [400] })
+
+    /* console.log('typeof data :>> ', typeof data);
+    console.log('index.split() :>> ', _index)
+
+    res.json({rows}) */
+
+    if (!req.body.index) {
+      log.warning(`Enter index name.`)
+      return res.status(400).json({ reason: `Enter index name.` })
+    }
+
+    client.bulk({ refresh: true, body: rows })
+    .then( (result) => {
+      const { statusCode } = result
+      res.status(statusCode).json({ result })
+    })
+    .catch( (err) => {
+      const { error, status } = err.meta.body
+      log.error([error.type, error.reason].join(', '))
+      return res.status(status).json({ reason: [error.type, error.reason].join(', '), [req.body]: req.body })
     })
   },
 
