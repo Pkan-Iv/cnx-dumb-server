@@ -46,7 +46,7 @@ dumb.use( (req, res, next) => {
 
 dumb.use( '/elastic', Elastic(logger) )
 dumb.use( '/test', Test(logger) )
-dumb.use( '/webhook', Webhook(logger) )
+dumb.use( '/', Webhook(logger) )
 
 dumb.listen( port, host, () => {
   log.info(`${chalk.green("✓")} Dumb Server started on http://${Host}:${Port}.`)
