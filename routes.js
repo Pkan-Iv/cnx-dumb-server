@@ -51,7 +51,7 @@ export function Webhook(logger) {
     { apikey, ar_result, ar_status, ar_time, called, uuid } = body
     
     if(apikey && ar_result && ar_status && ar_time && called && uuid) {
-      log.info('customers report received: %o', body)
+      log.info('customers report received:', body)
       log.info('message ', apikey, ar_result, body)
       return res.status(200).json()
     } 
