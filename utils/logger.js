@@ -2,22 +2,19 @@ import { nanoid } from 'nanoid'
 import chalk from 'chalk'
 import util from 'util'
 import Winston from 'winston'
-
 const { createLogger, format } = Winston,
       { colorize, combine, printf } = format,
       Formatters = {
-        console: ({ date, id, level, message, module, time }) => {
+        console: ({ date, id, level, message, module, time, args }) => {
           return [
             date,
             time,
             id,
             module,
             level,
-            message
+            message,
+            args
           ].join('  ')
-        },
-        custom: ({ date, id, level, message, module, time }) => {
-          return `${date} ${time} - ${id} - [${chalk.magenta(module)}] -   ${level}   - ${message}`
         }
       }
 
@@ -88,15 +85,28 @@ export default function CreateLogger({ level, path }) {
             }
             return info
           })(),
+          format((info) => {
+            if(info.args.length !== 0)  {
+                info.args = util.formatWithOptions( {colors: true, depth: 6, sorted: true } ,'%O', ...info.args)
+                return info
+            }
+            return info
+          })(),
           format.colorize(),
           format.printf((info) => {
+            
+            console.log('info.args', typeof info.args)
+            if ( info.args && Object.keys(info.args).length !== 0 ) {
+              if (typeof info.message === 'object') {
+                return `${info.date} ${info.time} - ${info.id} - [${chalk.magenta(info.module)}] -   ${info.level}\n \t${util.inspect(info.message, false, 6, true)} ${util.inspect(info.args, false, 6, true)}`
+              }
+              return `${info.date} ${info.time} - ${info.id} - [${chalk.magenta(info.module)}] -   ${info.level}\n\t${info.message} ${info.args}`
+            }
             if (typeof info.message === 'object') {
-              const { message } = info
-              return `${info.date} ${info.time} - ${info.id} - [${chalk.magenta(info.module)}] -   ${info.level}\n` + util.inspect(message, false, 6, true)
+              return `${info.date} ${info.time} - ${info.id} - [${chalk.magenta(info.module)}] -   ${info.level}\n \t${util.inspect(info.message, false, 6, true)}`
             }
             return `${info.date} ${info.time} - ${info.id} - [${chalk.magenta(info.module)}] -   ${info.level}\n\t${info.message}`
-          }
-          ),
+          })
         ),
         level: level || 'debug'
       }),
@@ -105,43 +115,43 @@ export default function CreateLogger({ level, path }) {
 
   const logger = createLogger({
     levels: Winston.config.syslog.levels,
-    transports,
+    transports
   })
 
   return (defines) => {
     return {
-      alert(message) {
-        return write('alert', { ...defines, message })
+      alert(message, ...args) {
+        return write('alert', { ...defines, message, args })
       },
 
-      critical(message) {
-        return write('crit', { ...defines, message })
+      critical(message, ...args) {
+        return write('crit', { ...defines, message, args })
       },
 
-      debug(message, ...args) {
+      debug(message, ...args ) {
         return write('debug', { ...defines, message, args })
       },
 
-      emergency(message) {
-        return write('emerg', { ...defines, message })
+      emergency(message, ...args) {
+        return write('emerg', { ...defines, message, args })
       },
 
-      error(message) {
-        return write('error', { ...defines, message })
+      error(message, ...args) {
+        return write('error', { ...defines, message, args })
       },
 
-      info(message) {
-        return write('info', { ...defines, message })
+      info(message, ...args) {
+        return write('info', { ...defines, message, args })
       },
 
       init,
 
-      notice(message) {
-        return write('notice', { ...defines, message })
+      notice(message, ...args) {
+        return write('notice', { ...defines, message, args })
       },
 
-      warning(message) {
-        return write('warning', { ...defines, message })
+      warning(message, ...args) {
+        return write('warning', { ...defines, message, args })
       }
     }
   }
