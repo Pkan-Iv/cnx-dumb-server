@@ -94,8 +94,6 @@ export default function CreateLogger({ level, path }) {
           })(),
           format.colorize(),
           format.printf((info) => {
-            
-            console.log('info.args', typeof info.args)
             if ( info.args && Object.keys(info.args).length !== 0 ) {
               if (typeof info.message === 'object') {
                 return `${info.date} ${info.time} - ${info.id} - [${chalk.magenta(info.module)}] -   ${info.level}\n \t${util.inspect(info.message, false, 6, true)} ${util.inspect(info.args, false, 6, true)}`
