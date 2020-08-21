@@ -1,7 +1,12 @@
 export function checkDate(string) {
   // https://regex101.com/r/TDXECk/1
-  const regex = /^(((0[1-9]|1[012])[-\/]([012][0-9]|3[012])[-\/]([12][0-9]{3}))|(([012][0-9]|3[012])[-\/](0[1-9]|1[012])[-\/][12][0-9]{3})|(([12][0-9]{3})[-\/](0[1-9]|1[012])[-\/]([012][0-9]|3[012])))($|(\s|[A-Z])(([01][0-9]|2[0-3])(:[0-5][0-9]){2}).[0-9]{3})$/g
-  (regex.test(string)) ? true : false
+  const regex = /^(((0[1-9]|1[012])[-\/]([012][0-9]|3[012])[-\/]([12][0-9]{3}))|(([012][0-9]|3[012])[-\/](0[1-9]|1[012])[-\/][12][0-9]{3})|(([12][0-9]{3})[-\/](0[1-9]|1[012])[-\/]([012][0-9]|3[012])))($|(\s|[A-Z])(([01][0-9]|2[0-3])(:[0-5][0-9]){2}).[0-9]{3})Z?$/gm
+
+  if(!regex.test(string)) {
+    console.log(formatDate(string))
+    return regex.test(formatDate(string))
+  }
+  return regex.test(string)
 }
 
 export function csvToJSON (data, delimiter = ',') {
@@ -41,7 +46,7 @@ export function flattenObj (obj, prefix = '') {
 
 export function formatDate(str) {
   //date format MMM dd YY
-  const regex = /^([A-Z a-z]{3})\W+(0?[0-9]|[1-2][0-9]|3[0-1])(\W|,\s)([0-9]{4})((\s\W\s))((?:(0[0-9]|1[0-9]|2[0-3]))(?:(:[0-5][0-9])){2}).([0-9]{3})/gm
+  const regex = /([A-Z a-z]{3})\W+(0?[0-9]|[1-2][0-9]|3[0-1])(\W|,\s)([0-9]{4})((\s\W\s))((?:(0[0-9]|1[0-9]|2[0-3]))(?:(:[0-5][0-9])){2}).([0-9]{3})/gm
   if (str !== undefined)
   return str.replace(regex, ($ ,p1, p2, p3, p4, p5, p6, p7,p8,p9,p10, decal, chaine) => {
     //console.log('date :>> ', `${p4}/${p1}/0${p2} ${p7}`);
