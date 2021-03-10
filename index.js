@@ -11,7 +11,7 @@ import helmet from 'helmet'
 import CreateLogger from './utils/logger.js'
 
 import * as Config from './config/config.json'
-import { Elastic, Webhook, Test } from './routes'
+import { Elastic, Webhook, Test, TTS } from './routes'
 
 const { host, logs, port } = Config,
       { HOST, PORT } = process.env,
@@ -46,6 +46,7 @@ dumb.use( (req, res, next) => {
 
 dumb.use( '/elastic', Elastic(logger) )
 dumb.use( '/test', Test(logger) )
+dumb.use( '/tts', TTS(logger) )
 dumb.use( '/', Webhook(logger) )
 
 dumb.listen( port, host, () => {
