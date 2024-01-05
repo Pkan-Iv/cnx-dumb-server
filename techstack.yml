@@ -1,11 +1,12 @@
 repo_name: Pkan-Iv/cnx-dumb-server
 report_id: 5961d37a15ecf8f1d4adf7a6f9393b58
+version: 0.1
 repo_type: Public
-timestamp: '2023-12-01T08:44:59+00:00'
+timestamp: '2024-01-05T08:29:31+00:00'
 requested_by: Pkan-Iv
 provider: github
 branch: master
-detected_tools_count: 26
+detected_tools_count: 27
 tools:
 - name: JavaScript
   description: Lightweight, interpreted, object-oriented language with first-class
@@ -16,6 +17,7 @@ tools:
   category: Languages & Frameworks
   sub_category: Languages
   image_url: https://img.stackshare.io/service/1209/javascript.jpeg
+  detection_source_url: https://github.com/Pkan-Iv/cnx-dumb-server
   detection_source: Repo Metadata
 - name: ExpressJS
   description: Sinatra inspired web development framework for node.js -- insanely
@@ -28,7 +30,7 @@ tools:
   category: Languages & Frameworks
   sub_category: Microframeworks (Backend)
   image_url: https://img.stackshare.io/service/1163/hashtag.png
-  detection_source_url: github.com/Pkan-Iv/cnx-dumb-server/blob/master/package.json
+  detection_source_url: https://github.com/Pkan-Iv/cnx-dumb-server/blob/master/package.json
   detection_source: package.json
   last_updated_by: Patrick Kaninda
   last_updated_on: 2020-07-31 08:43:41.000000000 Z
@@ -42,7 +44,7 @@ tools:
   category: Build, Test, Deploy
   sub_category: JavaScript Compilers
   image_url: https://img.stackshare.io/service/2739/-1wfGjNw.png
-  detection_source_url: github.com/Pkan-Iv/cnx-dumb-server/blob/master/package.json
+  detection_source_url: https://github.com/Pkan-Iv/cnx-dumb-server/blob/master/package.json
   detection_source: ".babelrc"
   last_updated_by: Patrick Kaninda
   last_updated_on: 2020-06-08 13:42:06.000000000 Z
@@ -55,6 +57,7 @@ tools:
   category: Build, Test, Deploy
   sub_category: Server Configuration and Automation
   image_url: https://img.stackshare.io/service/8067/default_90dcb1286af7685c68df319c764b80704df1155b.png
+  detection_source_url: https://github.com/Pkan-Iv/cnx-dumb-server/blob/master/package.json
   detection_source: package.json
   last_updated_by: Patrick Kaninda
   last_updated_on: 2020-07-09 08:49:01.000000000 Z
@@ -67,6 +70,7 @@ tools:
   category: Build, Test, Deploy
   sub_category: Code Review
   image_url: https://img.stackshare.io/service/3337/Q4L7Jncy.jpg
+  detection_source_url: https://github.com/Pkan-Iv/cnx-dumb-server/blob/master/package.json
   detection_source: package.json
   last_updated_by: Patrick Kaninda
   last_updated_on: 2020-06-08 13:42:06.000000000 Z
@@ -78,6 +82,7 @@ tools:
   category: Build, Test, Deploy
   sub_category: Version Control System
   image_url: https://img.stackshare.io/service/1046/git.png
+  detection_source_url: https://github.com/Pkan-Iv/cnx-dumb-server
   detection_source: Repo Metadata
 - name: Logstash
   description: Collect, Parse, &amp; Enrich Data
@@ -87,6 +92,7 @@ tools:
   category: Monitoring
   sub_category: Log Management
   image_url: https://img.stackshare.io/service/1683/preview.png
+  detection_source_url: https://github.com/Pkan-Iv/cnx-dumb-server/blob/master/package.json
   detection_source: package.json
   last_updated_by: Patrick Kaninda
   last_updated_on: 2020-06-08 13:42:06.000000000 Z
@@ -98,6 +104,7 @@ tools:
   category: Build, Test, Deploy
   sub_category: Front End Package Manager
   image_url: https://img.stackshare.io/service/1120/lejvzrnlpb308aftn31u.png
+  detection_source_url: https://github.com/Pkan-Iv/cnx-dumb-server/blob/master/package.json
   detection_source: package.json
   last_updated_by: Patrick Kaninda
   last_updated_on: 2020-06-08 13:42:06.000000000 Z
@@ -109,6 +116,7 @@ tools:
   category: Application Utilities
   sub_category: Search as a Service
   image_url: https://img.stackshare.io/service/841/Image_2019-05-20_at_4.58.04_PM.png
+  detection_source_url: https://github.com/Pkan-Iv/cnx-dumb-server/blob/master/package.json
   detection_source: package.json
   last_updated_by: Patrick Kaninda
   last_updated_on: 2020-07-09 08:49:01.000000000 Z
@@ -118,6 +126,7 @@ tools:
   open_source: false
   hosted_saas: false
   image_url: https://img.stackshare.io/service/8072/13122722.png
+  detection_source_url: https://github.com/Pkan-Iv/cnx-dumb-server/blob/master/package.json
   detection_source: package.json
   last_updated_by: Patrick Kaninda
   last_updated_on: 2020-07-09 08:49:01.000000000 Z
@@ -131,7 +140,7 @@ tools:
   category: Libraries
   sub_category: npm Packages
   image_url: https://img.stackshare.io/package/15810/default_004658cda9b38934f2871435e9dc15608c86e8be.png
-  detection_source_url: github.com/Pkan-Iv/cnx-dumb-server/blob/master/package.json
+  detection_source_url: https://github.com/Pkan-Iv/cnx-dumb-server/blob/master/package.json
   detection_source: package.json
   last_updated_by: Patrick Kaninda
   last_updated_on: 2020-07-31 08:43:41.000000000 Z
@@ -145,7 +154,7 @@ tools:
   category: Libraries
   sub_category: npm Packages
   image_url: https://img.stackshare.io/package/16153/default_ac04a744873b460c4ef30a7450ed0c83223640ab.png
-  detection_source_url: github.com/Pkan-Iv/cnx-dumb-server/blob/master/package.json
+  detection_source_url: https://github.com/Pkan-Iv/cnx-dumb-server/blob/master/package.json
   detection_source: package.json
   last_updated_by: Patrick Kaninda
   last_updated_on: 2020-07-31 08:43:41.000000000 Z
@@ -159,7 +168,7 @@ tools:
   category: Libraries
   sub_category: npm Packages
   image_url: https://img.stackshare.io/package/15819/default_98aa227f51aa9d787815ec3fd98d0ab2bfebbb91.png
-  detection_source_url: github.com/Pkan-Iv/cnx-dumb-server/blob/master/package.json
+  detection_source_url: https://github.com/Pkan-Iv/cnx-dumb-server/blob/master/package.json
   detection_source: package.json
   last_updated_by: Patrick Kaninda
   last_updated_on: 2020-07-31 08:43:41.000000000 Z
@@ -173,7 +182,7 @@ tools:
   category: Libraries
   sub_category: npm Packages
   image_url: https://img.stackshare.io/package/15800/default_4acafe585186b4157fa23322ae7ca89e24b5cdef.png
-  detection_source_url: github.com/Pkan-Iv/cnx-dumb-server/blob/master/package.json
+  detection_source_url: https://github.com/Pkan-Iv/cnx-dumb-server/blob/master/package.json
   detection_source: package.json
   last_updated_by: Patrick Kaninda
   last_updated_on: 2020-07-31 08:43:41.000000000 Z
@@ -187,7 +196,7 @@ tools:
   category: Libraries
   sub_category: npm Packages
   image_url: https://img.stackshare.io/package/16208/default_180418c6fa6cdb8f7a3500f84a8fedb884fcb3fa.png
-  detection_source_url: github.com/Pkan-Iv/cnx-dumb-server/blob/master/package.json
+  detection_source_url: https://github.com/Pkan-Iv/cnx-dumb-server/blob/master/package.json
   detection_source: package.json
   last_updated_by: Patrick Kaninda
   last_updated_on: 2020-07-31 08:43:41.000000000 Z
@@ -201,7 +210,7 @@ tools:
   category: Libraries
   sub_category: npm Packages
   image_url: https://img.stackshare.io/package/18613/default_773b64a22a37fbf7229b0ace7d1b9ed4bf814edb.png
-  detection_source_url: github.com/Pkan-Iv/cnx-dumb-server/blob/master/package.json
+  detection_source_url: https://github.com/Pkan-Iv/cnx-dumb-server/blob/master/package.json
   detection_source: package.json
   last_updated_by: Patrick Kaninda
   last_updated_on: 2020-07-31 08:43:41.000000000 Z
@@ -215,7 +224,7 @@ tools:
   category: Libraries
   sub_category: npm Packages
   image_url: https://img.stackshare.io/package/18322/default_5595878913d7a8dc496a66a64daf4737f9176891.png
-  detection_source_url: github.com/Pkan-Iv/cnx-dumb-server/blob/master/package.json
+  detection_source_url: https://github.com/Pkan-Iv/cnx-dumb-server/blob/master/package.json
   detection_source: package.json
   last_updated_by: Patrick Kaninda
   last_updated_on: 2020-07-31 08:43:41.000000000 Z
@@ -229,10 +238,24 @@ tools:
   category: Libraries
   sub_category: npm Packages
   image_url: https://img.stackshare.io/package/15906/default_7c39a83d4acd952df89b1ebfdb94c8646324fbf1.png
-  detection_source_url: github.com/Pkan-Iv/cnx-dumb-server/blob/master/package.json
+  detection_source_url: https://github.com/Pkan-Iv/cnx-dumb-server/blob/master/package.json
   detection_source: package.json
   last_updated_by: Patrick Kaninda
   last_updated_on: 2020-06-08 13:42:06.000000000 Z
+- name: chalk
+  description: Terminal string styling done right
+  package_url: https://www.npmjs.com/chalk
+  version: 4.1.0
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: npm Packages
+  image_url: https://img.stackshare.io/package/15813/default_db4a7791d2f1174547374b9b587bc10fec088a5a.png
+  detection_source_url: https://github.com/Pkan-Iv/cnx-dumb-server/blob/master/package.json
+  detection_source: package.json
+  last_updated_by: Patrick Kaninda
+  last_updated_on: 2020-07-09 08:49:01.000000000 Z
 - name: compression
   description: Node.js compression middleware
   package_url: https://www.npmjs.com/compression
@@ -243,7 +266,7 @@ tools:
   category: Libraries
   sub_category: npm Packages
   image_url: https://img.stackshare.io/package/16187/default_9a7a7dcd69c12c746dc4000dc4d1b75758079c9f.png
-  detection_source_url: github.com/Pkan-Iv/cnx-dumb-server/blob/master/package.json
+  detection_source_url: https://github.com/Pkan-Iv/cnx-dumb-server/blob/master/package.json
   detection_source: package.json
   last_updated_by: Patrick Kaninda
   last_updated_on: 2020-07-31 08:43:41.000000000 Z
@@ -257,7 +280,7 @@ tools:
   category: Libraries
   sub_category: npm Packages
   image_url: https://img.stackshare.io/package/16165/default_41f04716a804e853d5c38a5b81ee0ea8a842ad82.png
-  detection_source_url: github.com/Pkan-Iv/cnx-dumb-server/blob/master/package.json
+  detection_source_url: https://github.com/Pkan-Iv/cnx-dumb-server/blob/master/package.json
   detection_source: package.json
   last_updated_by: Patrick Kaninda
   last_updated_on: 2020-06-08 13:42:06.000000000 Z
@@ -271,7 +294,7 @@ tools:
   category: Libraries
   sub_category: npm Packages
   image_url: https://img.stackshare.io/package/17537/default_1922051267fa78212ab6eb1238cdf6aab8771493.png
-  detection_source_url: github.com/Pkan-Iv/cnx-dumb-server/blob/master/package.json
+  detection_source_url: https://github.com/Pkan-Iv/cnx-dumb-server/blob/master/package.json
   detection_source: package.json
   last_updated_by: Patrick Kaninda
   last_updated_on: 2020-07-31 08:43:41.000000000 Z
@@ -292,7 +315,7 @@ tools:
   category: Libraries
   sub_category: npm Packages
   image_url: https://img.stackshare.io/package/15818/default_db4a7791d2f1174547374b9b587bc10fec088a5a.png
-  detection_source_url: github.com/Pkan-Iv/cnx-dumb-server/blob/master/package.json
+  detection_source_url: https://github.com/Pkan-Iv/cnx-dumb-server/blob/master/package.json
   detection_source: package.json
   last_updated_by: Patrick Kaninda
   last_updated_on: 2020-07-31 08:43:41.000000000 Z
@@ -313,7 +336,7 @@ tools:
   category: Libraries
   sub_category: npm Packages
   image_url: https://img.stackshare.io/package/16584/default_7be6bee773ad8b04cf2fb7e9ff82f5d7ba648dfd.png
-  detection_source_url: github.com/Pkan-Iv/cnx-dumb-server/blob/master/package.json
+  detection_source_url: https://github.com/Pkan-Iv/cnx-dumb-server/blob/master/package.json
   detection_source: package.json
   last_updated_by: Patrick Kaninda
   last_updated_on: 2020-07-09 08:49:01.000000000 Z
@@ -327,7 +350,7 @@ tools:
   category: Libraries
   sub_category: npm Packages
   image_url: https://img.stackshare.io/package/17208/default_183829c5079b84333a720d8590a328efc043ba0e.png
-  detection_source_url: github.com/Pkan-Iv/cnx-dumb-server/blob/master/package.json
+  detection_source_url: https://github.com/Pkan-Iv/cnx-dumb-server/blob/master/package.json
   detection_source: package.json
   last_updated_by: Patrick Kaninda
   last_updated_on: 2020-07-09 08:49:01.000000000 Z
@@ -348,7 +371,7 @@ tools:
   category: Libraries
   sub_category: npm Packages
   image_url: https://img.stackshare.io/package/16148/default_9a7a7dcd69c12c746dc4000dc4d1b75758079c9f.png
-  detection_source_url: github.com/Pkan-Iv/cnx-dumb-server/blob/master/package.json
+  detection_source_url: https://github.com/Pkan-Iv/cnx-dumb-server/blob/master/package.json
   detection_source: package.json
   last_updated_by: Patrick Kaninda
   last_updated_on: 2020-06-08 13:42:06.000000000 Z
@@ -362,7 +385,7 @@ tools:
   category: Libraries
   sub_category: npm Packages
   image_url: https://img.stackshare.io/package/16003/default_261820f5687b4c88a3e8f95c71b5e8dccd34c1d7.png
-  detection_source_url: github.com/Pkan-Iv/cnx-dumb-server/blob/master/package.json
+  detection_source_url: https://github.com/Pkan-Iv/cnx-dumb-server/blob/master/package.json
   detection_source: package.json
   last_updated_by: Patrick Kaninda
   last_updated_on: 2020-07-09 08:49:01.000000000 Z
