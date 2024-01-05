@@ -34,7 +34,7 @@ Full tech stack [here](/techstack.md)
 # Tech Stack File
 ![](https://img.stackshare.io/repo.svg "repo") [Pkan-Iv/cnx-dumb-server](https://github.com/Pkan-Iv/cnx-dumb-server)![](https://img.stackshare.io/public_badge.svg "public")
 <br/><br/>
-|26<br/>Tools used|12/01/23 <br/>Report generated|
+|27<br/>Tools used|01/05/24 <br/>Report generated|
 |------|------|
 </div>
 
@@ -139,9 +139,9 @@ Full tech stack [here](/techstack.md)
 </table>
 
 
-## <img src='https://img.stackshare.io/group.svg' /> Open source packages (16)</h2>
+## <img src='https://img.stackshare.io/group.svg' /> Open source packages (17)</h2>
 
-## <img width='24' height='24' src='https://img.stackshare.io/service/1120/lejvzrnlpb308aftn31u.png'/> npm (16)
+## <img width='24' height='24' src='https://img.stackshare.io/service/1120/lejvzrnlpb308aftn31u.png'/> npm (17)
 
 |NAME|VERSION|LAST UPDATED|LAST UPDATED BY|LICENSE|VULNERABILITIES|
 |:------|:------|:------|:------|:------|:------|
@@ -153,6 +153,7 @@ Full tech stack [here](/techstack.md)
 |[babel-plugin-transform-imports](https://www.npmjs.com/babel-plugin-transform-imports)|v2.0.0|07/31/20|Patrick Kaninda |ISC|N/A|
 |[babel-watch](https://www.npmjs.com/babel-watch)|v7.0.0|07/31/20|Patrick Kaninda |MIT|N/A|
 |[body-parser](https://www.npmjs.com/body-parser)|v1.19.0|06/08/20|Patrick Kaninda |MIT|N/A|
+|[chalk](https://www.npmjs.com/chalk)|v4.1.0|07/09/20|Patrick Kaninda |MIT|N/A|
 |[compression](https://www.npmjs.com/compression)|v1.7.4|07/31/20|Patrick Kaninda |MIT|N/A|
 |[cors](https://www.npmjs.com/cors)|v2.8.5|06/08/20|Patrick Kaninda |MIT|N/A|
 |[cross-fetch](https://www.npmjs.com/cross-fetch)|v3.0.5|07/31/20|Patrick Kaninda |MIT|[CVE-2022-1365](https://github.com/advisories/GHSA-7gc6-qh9x-w6h8) (Moderate)|
